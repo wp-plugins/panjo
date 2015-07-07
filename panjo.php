@@ -62,8 +62,10 @@ class Panjo extends WP_Widget {
   }
 
 
+
   //display the widget
   function widget( $args, $instance ) {
+    insertStyle();
 
     $choicesDictionary = array(
       1 => "http://www.panjo.com/rss/partnerfeed/nsx-prime",
@@ -92,7 +94,60 @@ class Panjo extends WP_Widget {
     //echo "test";
     //print_r(get_option( 'pnjo_settings' ));
     //echo 'This is the Panjo widget';
-?>
+
+
+    //gets the array of settings
+    $setting = get_option( 'pnjo_settings' );
+
+    //number of items to display
+    $limit = array_values( $setting )[0];
+
+    //which market to display listings from
+    $marketChoice = array_values( $setting )[1];
+
+    //display listings on sidebar
+    displayListingsOnSideBar( $choicesDictionary[$marketChoice], $limit );
+
+    echo $after_widget;
+  }
+
+}
+
+function displayListingsOnSideBar( $rssUrl, $maxListings ) {
+
+
+  $feed = getItemsFromRssUrl( $rssUrl );
+
+  //number of listings found on feed
+  $listingsFound = count( $feed );
+
+  //guard so we don't try to load mroe listings than we found
+  if ( $maxListings> $listingsFound ) {
+    $maxListings = $listingsFound;
+  }
+
+
+  //iterate through listings found and echo display to sidebar
+  for ( $x=0;$x<$maxListings;$x++ ) {
+    $title = str_replace( ' & ', ' &amp; ', $feed[$x]['title'] );
+    $link = $feed[$x]['link'];
+    $description = $feed[$x]['desc'];
+    $imageurl = $feed[$x]['imageurl'];
+    $date = date( 'l F d, Y', strtotime( $feed[$x]['date'] ) );
+    $imageNode = $feed[$x]['imageNode'];
+    $linkthumb = $imageNode->item( 0 )->getAttribute( 'url' );
+    $itemPrice = $feed[$x]['price'];
+
+    //format title
+    $title = shortenTitle( $title );
+
+    //actually display the listing
+    displayListing( $link, $linkthumb, $title, $itemPrice );//$tempPrice );
+  }
+}
+
+function insertStyle(){
+    ?>
 
 
         <!-- internal html stylesheet -->
@@ -162,59 +217,11 @@ class Panjo extends WP_Widget {
 
 
         <?php
-
-    //gets the array of settings
-    $setting = get_option( 'pnjo_settings' );
-
-    //number of items to display
-    $limit = array_values( $setting )[0];
-
-    //which market to display listings from
-    $marketChoice = array_values( $setting )[1];
-
-    //display listings on sidebar
-    displayListingsOnSideBar( $choicesDictionary[$marketChoice], $limit );
-
-    echo $after_widget;
-  }
-
-}
-
-function displayListingsOnSideBar( $rssUrl, $maxListings ) {
-
-
-  $feed = getItemsFromRssUrl( $rssUrl );
-
-  //number of listings found on feed
-  $listingsFound = count( $feed );
-
-  //guard so we don't try to load mroe listings than we found
-  if ( $maxListings> $listingsFound ) {
-    $maxListings = $listingsFound;
-  }
-
-
-  //iterate through listings found and echo display to sidebar
-  for ( $x=0;$x<$maxListings;$x++ ) {
-    $title = str_replace( ' & ', ' &amp; ', $feed[$x]['title'] );
-    $link = $feed[$x]['link'];
-    $description = $feed[$x]['desc'];
-    $imageurl = $feed[$x]['imageurl'];
-    $date = date( 'l F d, Y', strtotime( $feed[$x]['date'] ) );
-    $imageNode = $feed[$x]['imageNode'];
-    $linkthumb = $imageNode->item( 0 )->getAttribute( 'url' );
-    $itemPrice = $feed[$x]['price'];
-
-    //format title
-    $title = shortenTitle( $title );
-
-    //actually display the listing
-    displayListing( $link, $linkthumb, $title, $itemPrice );//$tempPrice );
-  }
 }
 
 // returns the html for displaying listings in a grid view on a page
 function getListingsForPageView( $chosenMarket ) {
+  insertStyle();
 
   $shortcodeDictionary = array(
     "nsx-prime" => "http://www.panjo.com/rss/partnerfeed/nsx-prime",
