@@ -49,9 +49,9 @@ At this time the only way to display listings in a grid view is to use the short
 
 == Screenshots ==
 
-1. Marketplace Grid screenshot-1.png
-2. Marketplace Sidebar screenshot-2.png
-3. Settings screenshot-3.png
+1. marketplace grid
+2. marketplace sidebar
+3. settings page
 
 
 == Changelog ==
