@@ -8,7 +8,7 @@ Stable tag: 0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Embed live feed of Panjo listings from your favorite marketplace. 
+Embed a live feed of Panjo listings from your favorite marketplace. 
 
 == Description ==
 
@@ -17,6 +17,7 @@ This plugin allows you to display a live feed of Panjo listings from popular mar
 Learn more about the Panjo marketplace here: http://www.panjo.com/faq
 
 = Display options =
+
 Number of listings to show
 
 Selected marketplace
