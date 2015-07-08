@@ -90,12 +90,6 @@ class Panjo extends WP_Widget {
       20 => "http://www.panjo.com/rss/partnerfeed/panjo-tesla",
     );
 
-    echo $before_widget;
-    //echo "test";
-    //print_r(get_option( 'pnjo_settings' ));
-    //echo 'This is the Panjo widget';
-
-
     //gets the array of settings
     $setting = get_option( 'pnjo_settings' );
 
@@ -107,8 +101,6 @@ class Panjo extends WP_Widget {
 
     //display listings on sidebar
     displayListingsOnSideBar( $choicesDictionary[$marketChoice], $limit );
-
-    echo $after_widget;
   }
 
 }
@@ -132,7 +124,6 @@ function displayListingsOnSideBar( $rssUrl, $maxListings ) {
     $title = str_replace( ' & ', ' &amp; ', $feed[$x]['title'] );
     $link = $feed[$x]['link'];
     $description = $feed[$x]['desc'];
-    $imageurl = $feed[$x]['imageurl'];
     $date = date( 'l F d, Y', strtotime( $feed[$x]['date'] ) );
     $imageNode = $feed[$x]['imageNode'];
     $linkthumb = $imageNode->item( 0 )->getAttribute( 'url' );
@@ -256,7 +247,6 @@ function getListingsForPageView( $chosenMarket ) {
     $title = str_replace( ' & ', ' &amp; ', $feed[$x]['title'] );
     $link = $feed[$x]['link'];
     $description = $feed[$x]['desc'];
-    $imageurl = $feed[$x]['imageurl'];
     $date = date( 'l F d, Y', strtotime( $feed[$x]['date'] ) );
     $imageNode = $feed[$x]['imageNode'];
     $linkthumb = $imageNode->item( 0 )->getAttribute( 'url' );

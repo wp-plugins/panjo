@@ -1,10 +1,3 @@
-<style>
-h5{
-  color: black;
-  font-style: italic;
-}
-</style>
-
 <?php
 
 add_action( 'admin_menu', 'pnjo_add_admin_menu' );
