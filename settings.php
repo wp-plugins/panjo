@@ -4,7 +4,6 @@ add_action( 'admin_menu', 'pnjo_add_admin_menu' );
 add_action( 'admin_init', 'pnjo_settings_init' );
 add_action( 'update_option_pnjo_settings', 'sanitize_option_changes' );
 
-
 function sanitize_option_changes() {
   $shortcodeDictionary = array(
     1 => "[panjopageview market=\"nsx-prime\"",
@@ -29,53 +28,36 @@ function sanitize_option_changes() {
     20 => "[panjopageview market=\"tesla\"",
   );
 
-
   //options array under settings page
   $settingArray = get_option( 'pnjo_settings' );
 
   //options array under customize page
   $settingArraySidebar = get_option( 'widget_panjo' );
 
-  //$numListings = array_values( $settingArray )[0];
-
   //santize numlistings
   $numListingsChosen = $settingArray['pnjo_text_field_0'];
 
-  if ( $numListingsChosen < 0 || $numListingsChosen > 1000 || !is_numeric( $numListingsChosen ) ) {
-    $settingArray['pnjo_text_field_0'] = 5;
-    $settingArraySidebar[2]['widget_num'] = 5;
-  }
-  else{
-    $settingArraySidebar[2]['widget_num'] = $numListingsChosen;
-  }
+  $settingArraySidebar[2]['widget_num'] = $numListingsChosen;
 
   $marketplaceChosen = $settingArray['pnjo_select_field_0'];
 
   //update shortcode
   $settingArray['pnjo_shortcode_field'] = $shortcodeDictionary[$marketplaceChosen] . "]";   //"[panjopageview market=\"bikes\"]";
 
-
   //update option changes data in the database
-  update_option( 'pnjo_settings', $settingArray, yes );
-  update_option( 'widget_panjo', $settingArraySidebar, yes );
-
+  update_option( 'pnjo_settings', $settingArray);
+  update_option( 'widget_panjo', $settingArraySidebar);
 }
-
 
 function pnjo_add_admin_menu(  ) {
-
   add_options_page( 'Panjo', 'Panjo', 'manage_options', 'panjo', 'panjo_options_page' );
-
 }
 
-
 function pnjo_settings_init(  ) {
-
   register_setting( 'pluginPage',
     'pnjo_settings',
     'pnjo_validate_input'
   );
-
 
   add_settings_section(
     'pnjo_pluginPage_section',
@@ -84,26 +66,21 @@ function pnjo_settings_init(  ) {
     'pluginPage'
   );
 
-
   add_settings_field(
     'pnjo_text_field_0',
-    __( '# of listings to display in sidebar', 'wordpress' ),
+    __( 'Number of listings', 'wordpress' ),
     'pnjo_text_field_0_render',
     'pluginPage',
     'pnjo_pluginPage_section'
   );
 
-
-
   add_settings_field(
     'pnjo_select_field_0',
-    __( 'marketplace', 'wordpress' ),
+    __( 'Marketplace', 'wordpress' ),
     'pnjo_select_field_0_render',
     'pluginPage',
     'pnjo_pluginPage_section'
   );
-
-
 
   add_settings_field(
     'pnjo_text_field_2',
@@ -115,20 +92,16 @@ function pnjo_settings_init(  ) {
 
   add_settings_field(
     'pnjo_shortcode_field',
-    __( 'your shortcode', 'wordpress' ),
+    __( 'Shortcode', 'wordpress' ),
     'pnjo_shortcode_field_render',
     'pluginPage',
     'pnjo_pluginPage_section'
   );
-
-
 }
 
 // method that validates options
 // on the panjo settings page
 function pnjo_validate_input( $input ) {
-
-
   // Create our array for storing the validated options
   $output = array();
 
@@ -149,31 +122,25 @@ function pnjo_validate_input( $input ) {
   return apply_filters( 'sandbox_theme_validate_input_examples', $output, $input );
 }
 
-
-
 //renders the text box with number of listings to display
 function pnjo_text_field_0_render(  ) {
 
   $options = get_option( 'pnjo_settings' );
 ?>
 
-
   <input type='text' name='pnjo_settings[pnjo_text_field_0]' value='<?php echo $options['pnjo_text_field_0']; ?>'>
-  <h5>Changes how many listings our sidebar widget displays. Range (0-1000).</h5>
   <?php
-
 }
 
 // renders sub-panjo marketplace option
 function pnjo_select_field_0_render(  ) {
-
   $options = get_option( 'pnjo_settings' );
 ?>
 
   <select name='pnjo_settings[pnjo_select_field_0]'>
     <option value='1' <?php selected( $options['pnjo_select_field_0'], 1 ); ?>>Acura NSX</option>
-<!--     <option value='2' <?php selected( $options['pnjo_select_field_0'], 2 ); ?>>Aquariums</option>
- -->    <option value='3' <?php selected( $options['pnjo_select_field_0'], 3 ); ?>>Audi</option>
+<!--     <option value='2' <?php selected( $options['pnjo_select_field_0'], 2 ); ?>>Aquariums</option> -->    
+    <option value='3' <?php selected( $options['pnjo_select_field_0'], 3 ); ?>>Audi</option>
     <option value='4' <?php selected( $options['pnjo_select_field_0'], 4 ); ?>>Audio</option>
     <option value='5' <?php selected( $options['pnjo_select_field_0'], 5 ); ?>>Belly Dancing</option>
     <option value='6' <?php selected( $options['pnjo_select_field_0'], 6 ); ?>>Billiards</option>
@@ -194,15 +161,12 @@ function pnjo_select_field_0_render(  ) {
   </select>
 
 <?php
-
 }
 
 // renders I want to add my marketplace link
 function pnjo_text_field_2_render(  ) {
-
   $options = get_option( 'pnjo_settings' );
 ?>
-
 
   <h5>Don’t see the marketplace you’re interested in?
   </h5>
@@ -214,50 +178,36 @@ function pnjo_text_field_2_render(  ) {
   %0D%0DIs there anything special you want to tell us about your marketplace?"
     >Create your own marketplace on Panjo for free. 
   </a>
-
-  
-
   <?php
-
 }
 
 //renders the text box with number of listings to display
 function pnjo_shortcode_field_render(  ) {
-
   $options = get_option( 'pnjo_settings' );
 ?>
-
-
-<p>    <?php echo $options['pnjo_shortcode_field']; ?> </p>
-
-
-  <h5>Add this shortcode to any wordpress page to dislay Panjo listings in a feed.
-     <br>Click save changes to update the shortcode.
+  <p> <?php echo $options['pnjo_shortcode_field']; ?> </p>
+  <h5>Add this shortcode to a page to dislay Panjo listings in a feed.
+    <br>Click "Save Changes" to update the shortcode.
   </h5>
  <?php
 }
-
 
 //we could describe our option page here if we wanted to
 function pnjo_settings_section_callback(  ) {
   //echo __( 'This section description', 'wordpress' );
 }
 
-
 function panjo_options_page(  ) {
-
 ?>
   <form action='options.php' method='post'>
 
-    <?php
+  <?php
   settings_fields( 'pluginPage' );
   do_settings_sections( 'pluginPage' );
   submit_button();
-?>
+  ?>
 
   </form>
   <?php
-
 }
-
 ?>
